@@ -1,0 +1,528 @@
+<?xml version="1.0"?>
+
+<ruleset name="SentryEagle PMD Configuration"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        PMD Ruleset
+        SentryEagle, https://www.sentryeagle.com
+    </description>
+
+    <!-- Your rules will come here -->
+
+    <!-- Category: Best Practices -->
+    <rule ref="category/java/bestpractices.xml">
+        <!--
+            Reason for Exclusion: Not always useful.
+        -->
+        <exclude name="UnitTestAssertionsShouldIncludeMessage"/>
+    </rule>
+
+    <rule ref="category/java/bestpractices.xml/UnitTestContainsTooManyAsserts">
+        <properties>
+            <property name="maximumAsserts" value="3" />
+        </properties>
+    </rule>
+
+    <!-- Category: Code Style -->
+    <rule ref="category/java/codestyle.xml">
+        <!--
+            Reason for Exclusion: Unsuitable for 'equals()'.
+        -->
+        <exclude name="OnlyOneReturn" />
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/BooleanGetMethodName">
+        <properties>
+            <property name="checkParameterizedMethods" value="true" />
+        </properties>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/ClassNamingConventions">
+        <properties>
+            <property name="classPattern" value="[A-Z][a-zA-Z0-9]*" />
+            <property name="abstractClassPattern" value="Abstract[A-Z]\w+" />
+            <property name="interfacePattern" value="[A-Z][a-zA-Z0-9]*" />
+            <property name="enumPattern" value="[A-Z][a-zA-Z0-9]*" />
+            <property name="annotationPattern" value="[A-Z][a-zA-Z0-9]*" />
+            <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]*" />
+            <property name="testClassPattern" value="^[A-Z][a-zA-Z0-9]*Test$" />
+        </properties>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/MethodNamingConventions">
+        <properties>
+            <property name="methodPattern" value="[a-z][a-zA-Z0-9]*" />
+            <property name="staticPattern" value="[a-z][a-zA-Z0-9]*" />
+            <property name="nativePattern" value="[a-z][a-zA-Z0-9]*" />
+            <property name="junit3TestPattern" value="test[A-Z0-9_][a-zA-Z0-9_]*" />
+            <property name="junit4TestPattern" value="test[A-Z0-9_][a-zA-Z0-9_]*" />
+            <property name="junit5TestPattern" value="test[A-Z0-9_][a-zA-Z0-9_]*" />
+        </properties>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/ShortClassName">
+        <properties>
+            <property name="minimum" value="3" />
+        </properties>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/ShortVariable">
+        <properties>
+            <!--
+                Reason for Change: Allow Variables of Primitive Type like
+                                   'i', 'j', 'k', 'x', 'y', 'z'.
+            -->
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //VariableDeclarator[
+                            not(
+                                @Name = ('i', 'j', 'k', 'x', 'y', 'z')
+                                and(
+                                       ../PrimitiveType
+                                    or ../../PrimitiveType
+                                )
+                            )
+                            and(string-length(@Name) < 3)
+                        ]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/TooManyStaticImports">
+        <properties>
+            <!--
+                Note: All static imports can be disallowed by setting this to 0.
+            -->
+            <property name="maximumStaticImports" value="8" />
+        </properties>
+    </rule>
+
+    <!-- Category: Design -->
+    <rule ref="category/java/design.xml">
+        <!--
+            Reason for Exclusion: High Complexity.
+        -->
+        <exclude name="LawOfDemeter"/>
+        <!--
+            Reason for Exclusion: Unused Configuration.
+        -->
+        <exclude name="LoosePackageCoupling"/>
+    </rule>
+
+    <rule ref="category/java/design.xml/ExcessiveParameterList">
+        <properties>
+            <property name="minimum" value="5" />
+        </properties>
+    </rule>
+
+    <rule ref="category/java/design.xml/NcssCount">
+        <properties>
+            <property name="methodReportLevel" value="24" />
+        </properties>
+    </rule>
+
+    <!-- Category: Documentation -->
+    <rule ref="category/java/documentation.xml">
+        <!--
+            Reason for Exclusion: Better to Include Too Much than Too Little.
+        -->
+        <exclude name="CommentSize"/>
+    </rule>
+
+    <rule ref="category/java/documentation.xml/CommentContent">
+        <properties>
+            <property name="forbiddenRegex" value="idiot|jerk|fool|moron|loser|clown|stinker|coward|asshole" />
+        </properties>
+    </rule>
+
+    <rule ref="category/java/documentation.xml/CommentRequired">
+        <properties>
+            <property name="methodWithOverrideCommentRequirement" value="Required" />
+            <property name="accessorCommentRequirement" value="Required" />
+            <property name="classCommentRequirement" value="Required" />
+            <property name="fieldCommentRequirement" value="Required" />
+            <property name="publicMethodCommentRequirement" value="Required" />
+            <property name="protectedMethodCommentRequirement" value="Required" />
+            <property name="enumCommentRequirement" value="Required" />
+            <property name="serialVersionUIDCommentRequired" value="Required" />
+            <property name="serialPersistentFieldsCommentRequired" value="Required" />
+        </properties>
+    </rule>
+
+    <!-- Category: Error Prone -->
+    <rule ref="category/java/errorprone.xml">
+        <!--
+            Reason for Exclusion: Not Required Because of
+                                  'category/java/design.xml/MutableStaticState'.
+        -->
+        <exclude name="AssignmentToNonFinalStatic"/>
+    </rule>
+
+    <rule ref="category/java/errorprone.xml/AvoidLiteralsInIfCondition">
+        <properties>
+            <property name="ignoreMagicNumbers" value="-1,0,1,2"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/errorprone.xml/ProperLogger">
+        <properties>
+            <!--
+                See: https://pmd.github.io/pmd/pmd_rules_java_errorprone.html#properlogger
+                See: https://pmd.github.io/pmd/pmd_rules_java_errorprone.html#usecorrectexceptionlogging
+            -->
+            <property name="staticLoggerName" value="LOG" />
+            <property name="loggerName" value="log" />
+            <property name="loggerClass" value="org.apache.commons.logging.Log" />
+        </properties>
+    </rule>
+
+    <rule ref="category/java/errorprone.xml/TestClassWithoutTestCases">
+        <properties>
+            <property name="testClassPattern" value="^[A-Z][a-zA-Z0-9]*Test$" />
+        </properties>
+    </rule>
+
+    <!-- Category: Performance -->
+    <rule ref="category/java/multithreading.xml" />
+
+    <rule ref="category/java/multithreading.xml/NonThreadSafeSingleton">
+        <properties>
+            <property name="checkNonStaticMethods" value="true" />
+            <property name="checkNonStaticFields" value="true" />
+        </properties>
+    </rule>
+
+    <!-- Category: Performance -->
+    <rule ref="category/java/performance.xml" />
+
+    <!-- Category: Security -->
+    <rule ref="category/java/security.xml" />
+
+    <!-- Category: Custom -->
+    <rule name="ExpressionTooComplex"
+          language="java"
+          message="Expression is too complex"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            This rule flags expressions which contain at least
+            $maximumNumberOfAllowedSubExpressions (default: 5) subexpressions.
+        </description>
+
+        <properties>
+            <property
+                    name="maximumNumberOfAllowedSubExpressions"
+                    type="Integer"
+                    value="5"
+                    description="Maximum number of allowed subexpressions"/>
+            <property name="xpath">
+                <value>
+                    //*[@Expression = true() and not(ancestor::*/@Expression = true())][
+                           count(..//InfixExpression)
+                        +  count(not(..//UnaryExpression[@Operator = "-"]))
+                        >= $maximumNumberOfAllowedSubExpressions
+                    ]
+                </value>
+            </property>
+        </properties>
+
+        <example>
+            // Flagged Example.
+            final int result = a + b - c + d - e + f; // This will be flagged.
+            final boolean isValid = a > 0 || b > 0 || c > 0 || d > 0 || e > 0; // This will be flagged.
+
+            // Non Flagged Example.
+            final int result = a + b; // This will not be flagged.
+            final boolean isValid = a > 0 || b > 0; // This will not be flagged.
+        </example>
+    </rule>
+
+    <rule name="FieldMustBePrivateOrStaticFinal"
+          message="Fields must either be 'private' or 'static' and 'final'"
+          language="java"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            This rule flags fields that are not 'private' or 'static' and 'final'.
+        </description>
+
+        <properties>
+            <property name="xpath">
+                <value>
+                    //FieldDeclaration[
+                        not(
+                            pmd-java:modifiers() = "private"
+                            or (
+                                pmd-java:modifiers() = "static"
+                                and
+                                pmd-java:modifiers() = "final"
+                            )
+                        )
+                    ]
+                </value>
+            </property>
+        </properties>
+
+        <example>
+            // Flagged Example.
+            public class FlaggedExample {
+                public static String a = ""; // This will be flagged.
+                public        String b = ""; // This will be flagged.
+
+                       static String c = ""; // This will be flagged.
+                              String d = ""; // This will be flagged.
+            }
+
+            // Non Flagged Example.
+            public class NonFlaggedExample {
+                public  static final String a = ""; // This will not be flagged.
+                private              String b = ""; // This will not be flagged.
+            }
+        </example>
+    </rule>
+
+    <rule name="StaticFieldMustBeFinal"
+          message="Static field must be 'final'"
+          language="java"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            This rule flags non 'final' static fields.
+        </description>
+
+        <properties>
+            <property name="xpath">
+                <!-- see: https://pmd.github.io/pmd/pmd_userdocs_extending_writing_xpath_rules.html#pmd-java-modifiers -->
+                <value>
+                    //FieldDeclaration[
+                        not(pmd-java:modifiers() = "final")
+                        and(pmd-java:modifiers() = "static")
+                    ]
+                </value>
+            </property>
+        </properties>
+
+        <example>
+            // Flagged Example.
+            public class FlaggedExample {
+                public      static String PUBLIC_STATIC_CONST = "";     // This will be flagged.
+                protected   static String PROTECTED_STATIC_CONST = "";  // This will be flagged.
+                private     static String PRIVATE_STATIC_CONST = "";    // This will be flagged.
+                            static String STATIC_CONST = "";            // This will be flagged.
+            }
+
+            // Non Flagged Example.
+            public class NonFlaggedExample {
+                public      static final String PUBLIC_STATIC_FINAL_CONST = "";  // This will not be flagged.
+            }
+        </example>
+    </rule>
+
+    <rule name="ExitLambdaExpressionAtEnd"
+          message="Exit lambda expression at end"
+          language="java"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            This rule flags 'return' statements that are located before the end of lambda
+            expressions.
+        </description>
+
+        <properties>
+            <property name="xpath">
+                <value>
+                    //LambdaExpression[count(.//ReturnStatement) > 1]
+                </value>
+            </property>
+        </properties>
+
+        <example>
+            // Flagged Example.
+            (Integer integer) -> {
+                if (integer % 2 == 0) {
+                    return integer * 2; // This will be flagged.
+                }
+
+                return integer;
+            };
+
+            // Non Flagged Example.
+            (Integer integer) ->
+                    integer % 2 == 0
+                        ? integer * 2
+                        : integer;
+        </example>
+    </rule>
+
+    <rule name="DontReturnFromLoop"
+          message="Don't return from loop"
+          language="java"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            This rule flags 'return' statements in loops.
+        </description>
+
+        <properties>
+            <property name="xpath">
+                <value>
+                    //WhileStatement[.//ReturnStatement]
+                    | //ForStatement[.//ReturnStatement]
+                    | //DoStatement[.//ReturnStatement]
+                </value>
+            </property>
+        </properties>
+
+        <example>
+            // Flagged Example.
+            while(true) {
+                return; // This will be flagged.
+            }
+        </example>
+    </rule>
+
+    <rule name="DontReturnFromNestedBlock"
+          message="Don't 'return' from nested block."
+          language="java"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            This rule flags 'return' statements in nested blocks that are
+            at least 2 (two) levels deep.
+        </description>
+
+        <properties>
+            <property name="xpath">
+                <value>
+                    //MethodDeclaration[*[*[*[*[*[*[.//ReturnStatement]]]]]]]
+                </value>
+            </property>
+        </properties>
+
+        <example>
+            // Flagged Example.
+            int i = 0;
+            int j = 0;
+            int k = 0;
+
+            if (i == 0) {
+                if (j == 0) {
+                    if (k == 0) {
+                        return; // This will be flagged.
+                    }
+                }
+            }
+
+            // Non Flagged Example.
+            int i = 0;
+            int j = 0;
+
+            if (i == 0) {
+                if (j == 0) {
+                    return; // This will not be flagged.
+                }
+            }
+        </example>
+    </rule>
+
+    <rule name="AvoidContinue"
+          message="Don't shortcut loops with 'continue' statement."
+          language="java"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            This rule flags 'continue' statements.
+        </description>
+
+        <properties>
+            <property name="xpath">
+                <value>
+                    //ContinueStatement
+                </value>
+            </property>
+        </properties>
+
+        <example>
+            // Flagged Example.
+            int i = 0;
+            while (i != 10) {
+                if (i == 5) {
+                    continue; // This will be flagged.
+                }
+
+                i++;
+            }
+        </example>
+    </rule>
+
+    <rule name="AvoidBreak"
+          message="Don't break out of loops"
+          language="java"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            This rule flags 'break' statements in loops.
+
+            Note: The rule is still a little bit too rough as it also blocks
+                  permissible breaks in switch and foreach loops that are
+                  nested in other loops.
+
+                  XPath reaches its limits here.
+        </description>
+
+        <properties>
+            <property name="xpath">
+                <value>
+                    //WhileStatement[.//BreakStatement]
+                    | //DoStatement[.//BreakStatement]
+                    | //ForStatement[./ForInit and .//BreakStatement]
+                </value>
+            </property>
+        </properties>
+
+        <example>
+            // Flagged Example.
+            int i = 0;
+            while (i != 10) {
+                if (i == 5) {
+                    break; // This will be flagged.
+                }
+
+                i++;
+            }
+        </example>
+    </rule>
+
+    <rule name="FindBetterNames"
+          message="Find better name and name parts"
+          language="java"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            This rule flags variable and method names that use generic and non-descriptive names like:
+
+            - Temp, temp
+            - Tmp, tmp
+            - Misc, misc
+            - Help, help
+        </description>
+
+        <properties>
+            <property name="xpath">
+                <value>
+                    <!-- match variable declarations (case-insensitive) -->
+                    //VariableDeclarator//VariableId[matches(@Name, '(te?mp|misc|help)$', 'i')]
+                    |
+                    <!-- match method declarations (case-insensitive) -->
+                    //MethodDeclaration[matches(@Name, '(te?mp|misc|help)$', 'i')]
+                </value>
+            </property>
+        </properties>
+
+        <example>
+            // Flagged Example.
+            int temp = 0; // This will be flagged.
+            void help() { // This will be flagged.
+                // ...
+            }
+        </example>
+    </rule>
+
+</ruleset>
